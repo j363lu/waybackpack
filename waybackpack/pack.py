@@ -37,7 +37,7 @@ def replace_invalid_chars(path, fallback_char="_"):
 class Pack(object):
     def __init__(self, url, timestamps=None, uniques_only=False, session=None):
 
-        self.url = url
+        self.url = url + "/"
         prefix = "http://" if urlparse(url).scheme == "" else ""
         self.full_url = prefix + url
         self.parsed_url = urlparse(self.full_url)
@@ -77,8 +77,8 @@ class Pack(object):
 
             filedir = os.path.join(
                 directory,
-                asset.timestamp,
                 replace_invalid_chars(self.parsed_url.netloc, fallback_char),
+                asset.timestamp,
                 replace_invalid_chars(path_head.lstrip("/"), fallback_char),
             )
 
