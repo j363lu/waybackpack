@@ -1,4 +1,5 @@
 # waybackpack `v0.5.0`
+This repository was forked from jsvine/waybackpack
 
 Waybackpack is a command-line tool that lets you download the entire Wayback Machine archive for a given URL.
 
@@ -12,18 +13,12 @@ Result:
 
 ```sh
 ~/Downloads/dol-wayback/
-├── 19961102145216
-│   └── www.dol.gov
-│       └── index.html
-├── 19961103063843
-│   └── www.dol.gov
-│       └── index.html
-├── 19961222171647
-│   └── www.dol.gov
-│       └── index.html
-└── 19961223193614
-    └── www.dol.gov
-        └── index.html
+├── www.dol.gov
+│   └── 19961102145216.html
+│   └── 19961103063843.html   
+│   └── 19961222171647.html
+│   └── 19961223193614.html     
+        
 ```
 
 Or, just to print the URLs of all archived snapshots:
@@ -72,6 +67,7 @@ optional arguments:
                         download. Should take the format YYYYMMDDhhss, though
                         you can omit as many of the trailing digits as you
                         like. E.g., '201604' is valid.
+  --frequency FREQUENCY The minimum difference in days between two consecutive snapshots
   --user-agent USER_AGENT
                         The User-Agent header to send along with your requests
                         to the Wayback Machine. If possible, please include
