@@ -1,6 +1,7 @@
 import logging
 import os
 import platform
+from bs4 import BeautifulSoup 
 
 from .asset import Asset
 from .cdx import search
@@ -121,3 +122,21 @@ class Pack(object):
             with open(filepath, "wb") as f:
                 logger.info("Writing to {0}\n".format(filepath))
                 f.write(content)
+
+            # add a base url to the saved HTML file so that images with relative path will be rendered
+            # Open and read the HTML file
+            with open(filepath, "r", encoding="utf-8") as file:
+                soup = BeautifulSoup(file, "lxml")
+
+            # Check if there's already a <base> tag
+            base_tag = soup.base
+
+            # If not, create one and add it to the <head> section
+            if not base_tag:
+                base = soup.new_tag("base", href="https://web.archive.org/")
+                soup.head.insert(0, base)  # Insert at the beginning of the <head> section
+
+            # Save the modified HTML content
+            with open(filepath, "w", encoding="utf-8") as file:
+                file.write(str(soup))
+

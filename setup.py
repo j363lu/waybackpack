@@ -5,7 +5,8 @@ import subprocess
 version = "0.5.0"
 
 base_reqs = [
-    "requests"
+    "requests",
+    "beautifulsoup4"
 ]
 
 setup(
