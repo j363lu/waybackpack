@@ -74,12 +74,11 @@ class Pack(object):
         for asset in tqdm(self.assets) if progress else self.assets:
             path_head, path_tail = os.path.split(self.parsed_url.path)
             if path_tail == "":
-                path_tail = "index.html"
+                path_tail = f"{asset.timestamp}.html"
 
             filedir = os.path.join(
                 directory,
                 replace_invalid_chars(self.parsed_url.netloc, fallback_char),
-                asset.timestamp,
                 replace_invalid_chars(path_head.lstrip("/"), fallback_char),
             )
 
