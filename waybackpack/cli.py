@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import argparse
 import logging
+from datetime import datetime, timedelta
 
 from .cdx import search
 from .pack import Pack
@@ -57,6 +58,12 @@ def parse_args():
     )
 
     parser.add_argument(
+        "--frequency",
+        help="The number of days between two consecutive snapshots.",
+        default=1
+    )
+
+    parser.add_argument(
         "--user-agent",
         help="The User-Agent header to send along with your requests to the Wayback Machine. If possible, please include the phrase 'waybackpack' and your email address. That way, if you're battering their servers, they know who to contact. Default: '{0}'.".format(
             DEFAULT_USER_AGENT
@@ -65,7 +72,7 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--follow-redirects", help="Follow redirects.", action="store_true"
+        "--follow-redirects", help="Follow redirects.", action="store_true", default=True
     )
 
     parser.add_argument(
@@ -112,6 +119,25 @@ def parse_args():
     args = parser.parse_args()
     return args
 
+# convert the timestamp to a datetime object
+def string_to_datetime(s):
+    return datetime.strptime(s, '%Y%m%d%H%M%S')
+
+# filter the list of timestamps so that two consecutive timestamps differ by at least frequency days
+def filter_by_frequency(timestamps, frequency):
+    if not timestamps:
+        return []
+    
+    result = [timestamps[0]]
+    last_dt = string_to_datetime(timestamps[0])
+
+    for s in timestamps[1:]:
+        current_dt = string_to_datetime(s)
+        if current_dt - last_dt >= timedelta(days=1):
+            result.append(s)
+            last_dt = current_dt
+    return result
+
 
 def main():
     args = parse_args()
@@ -137,6 +163,9 @@ def main():
     )
 
     timestamps = [snap["timestamp"] for snap in snapshots]
+
+    # filter timestamps so that two consecutive elements differ by at least frequency days
+    timestamps = filter_by_frequency(timestamps, args.frequency)
 
     pack = Pack(args.url, timestamps=timestamps, session=session)
 
