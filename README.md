@@ -28,9 +28,12 @@ waybackpack http://www.dol.gov/ --list
 ```
 
 ## Installation
+1. Obtain a copy of the code either by git clone or downloading a zip.
+
+2. In your terminal, change directory to the root directory of the code and run 
 
 ```
-pip install waybackpack
+pip install .
 ```
 
 ## Usage
