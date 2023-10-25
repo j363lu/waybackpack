@@ -68,6 +68,7 @@ optional arguments:
                         you can omit as many of the trailing digits as you
                         like. E.g., '201604' is valid.
   --frequency FREQUENCY The minimum difference in days between two consecutive snapshots
+  --image               Also saves images of the HTML
   --user-agent USER_AGENT
                         The User-Agent header to send along with your requests
                         to the Wayback Machine. If possible, please include
