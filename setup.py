@@ -6,7 +6,8 @@ version = "0.5.0"
 
 base_reqs = [
     "requests",
-    "beautifulsoup4"
+    "beautifulsoup4",
+    "html2image"
 ]
 
 setup(

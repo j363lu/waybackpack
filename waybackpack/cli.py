@@ -59,8 +59,15 @@ def parse_args():
 
     parser.add_argument(
         "--frequency",
-        help="The number of days between two consecutive snapshots.",
-        default=1
+        help="The minimum difference in days between two consecutive snapshots",
+        default=1,
+    )
+
+    parser.add_argument(
+        "--image",
+        help="Also saves images of the HTML",
+        action="store_true",
+        default=False,
     )
 
     parser.add_argument(
@@ -72,7 +79,10 @@ def parse_args():
     )
 
     parser.add_argument(
-        "--follow-redirects", help="Follow redirects.", action="store_true", default=True
+        "--follow-redirects",
+        help="Follow redirects.",
+        action="store_true",
+        default=True,
     )
 
     parser.add_argument(
@@ -119,15 +129,17 @@ def parse_args():
     args = parser.parse_args()
     return args
 
+
 # convert the timestamp to a datetime object
 def string_to_datetime(s):
-    return datetime.strptime(s, '%Y%m%d%H%M%S')
+    return datetime.strptime(s, "%Y%m%d%H%M%S")
+
 
 # filter the list of timestamps so that two consecutive timestamps differ by at least frequency days
 def filter_by_frequency(timestamps, frequency):
     if not timestamps:
         return []
-    
+
     result = [timestamps[0]]
     last_dt = string_to_datetime(timestamps[0])
 
@@ -177,6 +189,7 @@ def main():
             ignore_errors=args.ignore_errors,
             no_clobber=args.no_clobber,
             progress=args.progress,
+            image=args.image,
         )
     else:
         flag = "id_" if args.raw else ""

@@ -1,7 +1,8 @@
 import logging
 import os
 import platform
-from bs4 import BeautifulSoup 
+from bs4 import BeautifulSoup
+from html2image import Html2Image
 
 from .asset import Asset
 from .cdx import search
@@ -37,7 +38,6 @@ def replace_invalid_chars(path, fallback_char="_"):
 
 class Pack(object):
     def __init__(self, url, timestamps=None, uniques_only=False, session=None):
-
         self.url = url + "/"
         prefix = "http://" if urlparse(url).scheme == "" else ""
         self.full_url = prefix + url
@@ -64,8 +64,8 @@ class Pack(object):
         no_clobber=False,
         progress=False,
         fallback_char="_",
+        image=False,
     ):
-
         if progress and not has_tqdm:
             raise Exception(
                 "To print progress bars, you must have `tqdm` installed. To install: pip install tqdm."
@@ -133,9 +133,15 @@ class Pack(object):
             # If not, create one and add it to the <head> section
             if not base_tag:
                 base = soup.new_tag("base", href="https://web.archive.org/")
-                soup.head.insert(0, base)  # Insert at the beginning of the <head> section
+                soup.head.insert(
+                    0, base
+                )  # Insert at the beginning of the <head> section
 
             # Save the modified HTML content
             with open(filepath, "w", encoding="utf-8") as file:
                 file.write(str(soup))
 
+            # Save images of HTML
+            if image:
+                hti = Html2Image(output_path=filedir)
+                hti.screenshot(html_file=filepath, save_as=f"{asset.timestamp}.png")
